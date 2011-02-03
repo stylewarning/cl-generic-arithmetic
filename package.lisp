@@ -92,7 +92,6 @@
            )
   )
 
-#+ignore
 (defpackage #:common-lisp/generic-arithmetic-user
   (:nicknames :cl/ga-user)
   (:use :common-lisp/generic-arithmetic))
