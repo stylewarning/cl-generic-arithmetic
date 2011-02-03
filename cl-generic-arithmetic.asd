@@ -7,7 +7,7 @@
   :name "Common Lisp Generic Arithmetic"
   :version "0.0.1"
   :author "Robert Smith"
-  :license ""
+  :license "MIT (see file LICENSE)"
   :description "The COMMON-LISP package with generic numerical operators."
   :long-description "The COMMON-LISP package with generic numerical operators."
 
