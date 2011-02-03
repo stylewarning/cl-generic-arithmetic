@@ -1,7 +1,7 @@
 ;;;; clga-generics.lisp
 ;;;; Copyright (c) 2011 Robert Smith
 
-(in-package :cl/ga)
+(in-package :common-lisp/generic-arithmetic)
 
 ;;(defgeneric + (&rest args))
 (defgeneric unary-+ (x))

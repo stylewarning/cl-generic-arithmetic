@@ -5,7 +5,7 @@
 
 ;;;; Lots TODO.
 
-(in-package :cl/ga)
+(in-package :common-lisp/generic-arithmetic)
 
 (defmacro defun-folded (name binaryf
                         &key
