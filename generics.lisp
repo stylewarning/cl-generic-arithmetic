@@ -1,7 +1,7 @@
 ;;;; clga-generics.lisp
 ;;;; Copyright (c) 2011 Robert Smith
 
-(in-package :common-lisp/generic-arithmetic)
+(in-package :cl/ga)
 
 ;;(defgeneric + (&rest args))
 (defgeneric unary-+ (x))
@@ -37,7 +37,7 @@
 
 (defgeneric sqrt (number))
 
-(defgeneric log (number &optional (base nil base-p)))
+(defgeneric log (number &optional base))
 
 (defgeneric exp (number))
 
@@ -51,7 +51,7 @@
 
 (defgeneric acos (number))
 
-(defgeneric atan (y &optional (x nil xp)))
+(defgeneric atan (y &optional x))
 
 (defgeneric sinh (number))
 
@@ -89,7 +89,7 @@
 ;;(defgeneric >= (number &rest more-numbers))
 (defgeneric binary->= (number1 number2))
 
-(defgeneric complex (realpart &optional (imagpart 0)))
+(defgeneric complex (realpart &optional imagpart))
 
 (defgeneric integer-decode-float (x))
 
@@ -97,23 +97,23 @@
 
 (defgeneric scale-float (f ex))
 
-(defgeneric float (number &optional (other nil otherp)))
+(defgeneric float (number &optional other))
 
-(defgeneric floor (number &optional (divisor 1)))
+(defgeneric floor (number &optional divisor))
 
-(defgeneric ffloor (number &optional (divisor 1)))
+(defgeneric ffloor (number &optional divisor))
 
-(defgeneric ceiling (number &optional (divisor 1)))
+(defgeneric ceiling (number &optional divisor))
 
-(defgeneric fceiling (number &optional (divisor 1)))
+(defgeneric fceiling (number &optional divisor))
 
-(defgeneric truncate (number &optional (divisor 1)))
+(defgeneric truncate (number &optional divisor))
 
-(defgeneric ftruncate (number &optional (divisor 1)))
+(defgeneric ftruncate (number &optional divisor))
 
-(defgeneric round (number &optional (divisor 1)))
+(defgeneric round (number &optional divisor))
 
-(defgeneric fround (number &optional (divisor 1)))
+(defgeneric fround (number &optional divisor))
 
 (defgeneric realpart (number))
 
@@ -121,7 +121,7 @@
 
 (defgeneric conjugate (number))
 
-(defgeneric float-sign (float1 &optional (float2 (float 1 float1))))
+(defgeneric float-sign (float1 &optional float2))
 
 ;;(defgeneric max (number &rest more-numbers))
 
@@ -135,7 +135,7 @@
 
 (defgeneric coerce (obj output-type-spec))
 
-(defgeneric random (arg &optional (state *random-state*)))
+(defgeneric random (arg &optional state))
 
 (defgeneric realp (object))
 

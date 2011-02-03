@@ -5,11 +5,11 @@
 
 ;;;; Lots TODO.
 
-(in-package :common-lisp/generic-arithmetic)
+(in-package :cl/ga)
 
 (defmacro defun-folded (name binaryf
                         &key
-                        (unary-function #'identity)
+                        (unary-function '#'identity)
                         (initial-value nil initial-value-p))
   `(defun ,name ,(if initial-value-p
                      `(&rest numbers)
@@ -193,7 +193,7 @@
   )
 ;; XXX: Should this *always* be true for one argument? How about if it
 ;; was overloaded with NaN? Should we have a UNARY-= ?
-(defun-folded - #'binary-=
+(defun-folded = #'binary-=
   :unary-function (constantly t))
 
 (defmethod binary-/= ((n1 number) (n2 number))
@@ -204,7 +204,7 @@
 (defun /= (number &rest more-numbers)
   ;; TODO
   )
-(defun-folded - #'binary-/=
+(defun-folded /= #'binary-/=
   :unary-function (constantly t))
 
 (defmethod binary-< ((n1 number) (n2 number))
@@ -215,7 +215,7 @@
 (defun < (number &rest more-numbers)
   ;; TODO
   )
-(defun-folded - #'binary-<
+(defun-folded < #'binary-<
   :unary-function (constantly t))
 
 (defmethod binary-> ((n1 number) (n2 number))
@@ -226,7 +226,7 @@
 (defun > (number &rest more-numbers)
   ;; TODO
   )
-(defun-folded - #'binary->
+(defun-folded > #'binary->
   :unary-function (constantly t))
 
 (defmethod binary-<= ((n1 number) (n2 number))
@@ -237,7 +237,7 @@
 (defun <= (number &rest more-numbers)
   ;; TODO
   )
-(defun-folded - #'binary-<=
+(defun-folded <= #'binary-<=
   :unary-function (constantly t))
 
 (defmethod binary->= ((n1 number) (n2 number))
@@ -248,7 +248,7 @@
 (defun >= (number &rest more-numbers)
   ;; TODO
   )
-(defun-folded - #'binary->=
+(defun-folded >= #'binary->=
   :unary-function (constantly t))
 
 (defmethod complex (realpart &optional (imagpart 0))

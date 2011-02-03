@@ -14,6 +14,5 @@
   :serial t
   :components ((:file "package")
                (:file "generics")
-               (:file "methods")
-               )
-  :depends-on ("conduit-packages"))
+               (:file "methods"))
+  :depends-on (:conduit-packages))
