@@ -50,4 +50,4 @@
 
 (defpackage #:common-lisp/generic-arithmetic-user
   (:nicknames :cl/ga-user)
-  (:use :cl/ga))
+  (:use :common-lisp/generic-arithmetic))
