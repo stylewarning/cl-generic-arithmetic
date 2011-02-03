@@ -13,7 +13,7 @@
 
   :serial t
   :components ((:file "package")
-               (:file "clga-generics")
-               (:file "clga-methods")
+               (:file "generics")
+               (:file "methods")
                )
   :depends-on ("conduit-packages"))
