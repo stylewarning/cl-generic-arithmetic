@@ -37,6 +37,16 @@
 
 (defgeneric sqrt (number))
 
+(defgeneric isqrt (number))
+
+(defgeneric unary-lcm (x))
+
+(defgeneric binary-lcm (x y))
+
+(defgeneric unary-gcd (x))
+
+(defgeneric binary-gcd (x y))
+
 (defgeneric log (number &optional base))
 
 (defgeneric exp (number))
@@ -137,7 +147,13 @@
 
 (defgeneric random (arg &optional state))
 
+(defgeneric integerp (object))
+
+(defgeneric rationalp (object))
+
 (defgeneric realp (object))
+
+(defgeneric floatp (object))
 
 (defgeneric complexp (object))
 

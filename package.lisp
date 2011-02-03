@@ -12,7 +12,8 @@
                       #:zerop #:plusp #:minusp
                       #:oddp #:evenp
                       #:abs
-                      #:sqrt
+                      #:sqrt #:isqrt
+                      #:lcm #:gcd
                       #:log #:exp
                       #:sin #:cos #:tan
                       #:asin #:acos #:atan
@@ -40,56 +41,63 @@
                       #:signum
                       #:coerce
                       #:random
-                      #:realp #:complexp #:numberp
+                      #:integerp #:rationalp #:realp #:complexp #:numberp
+                      #:floatp
                       #:incf #:decf
                       #:rational
                       #:rationalize)
-  (:export #:unary-+ #:binary-+
-           #:unary-- #:binary--
-           #:unary-* #:binary-*
-           #:unary-/ #:binary-/
-           #:binary-= #:binary-/=
-           #:binary-> #:binary-<
-           #:binary->= #:binary-<=
-           ;; shadowed
-           #:+ #:- #:* #:/
-           #:1+ #:1-
-           #:zerop #:plusp #:minusp
-           #:oddp #:evenp
-           #:abs
-           #:sqrt
-           #:log #:exp
-           #:sin #:cos #:tan
-           #:asin #:acos #:atan
-           #:sinh #:cosh #:tanh
-           #:asinh #:acosh #:atanh
-           #:expt
-           #:mod #:rem
-           #:= #:/=
-           #:< #:>
-           #:<= #:>=
-           #:complex
-           #:integer-decode-float #:decode-float #:scale-float
-           #:float
-           #:float-digits
-           #:floor #:ffloor
-           #:ceiling #:fceiling
-           #:truncate #:ftruncate
-           #:round #:fround
-           #:realpart #:imagpart
-           #:conjugate
-           #:float-sign
-           #:max #:min
-           #:cis
-           #:phase
-           #:signum
-           #:coerce
-           #:random
-           #:realp #:complexp #:numberp
-           #:incf #:decf
-           #:rational
-           #:rationalize
-           )
+  (:export
+   ;; new functions
+   #:unary-+ #:binary-+
+   #:unary-- #:binary--
+   #:unary-* #:binary-*
+   #:unary-/ #:binary-/
+   #:binary-= #:binary-/=
+   #:binary-> #:binary-<
+   #:binary->= #:binary-<=
+   #:unary-lcm #:binary-lcm
+   #:unary-gcd #:binary-gcd
+   ;; shadowing COMMON-LISP
+   #:+ #:- #:* #:/
+   #:1+ #:1-
+   #:zerop #:plusp #:minusp
+   #:oddp #:evenp
+   #:abs
+   #:sqrt #:isqrt
+   #:lcm #:gcd
+   #:log #:exp
+   #:sin #:cos #:tan
+   #:asin #:acos #:atan
+   #:sinh #:cosh #:tanh
+   #:asinh #:acosh #:atanh
+   #:expt
+   #:mod #:rem
+   #:= #:/=
+   #:< #:>
+   #:<= #:>=
+   #:complex
+   #:integer-decode-float #:decode-float #:scale-float
+   #:float
+   #:float-digits
+   #:floor #:ffloor
+   #:ceiling #:fceiling
+   #:truncate #:ftruncate
+   #:round #:fround
+   #:realpart #:imagpart
+   #:conjugate
+   #:float-sign
+   #:max #:min
+   #:cis
+   #:phase
+   #:signum
+   #:coerce
+   #:random
+   #:integerp #:rationalp #:realp #:complexp #:numberp
+   #:floatp
+   #:incf #:decf
+   #:rational
+   #:rationalize
+   )
   )
 
 (defpackage #:common-lisp/generic-arithmetic-user

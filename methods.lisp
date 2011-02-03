@@ -1,9 +1,21 @@
 ;;;; clga-methods.lisp
 ;;;; Copyright (c) 2011 Robert Smith
 
-;;;; All of the "default" method implementations for built-in CL operators/types.
+;;;; All of the "default" method implementations for built-in CL
+;;;; operators/types.
 
-;;;; Lots TODO.
+;;;; NOTE: We use CL:FLOAT as the argument specifier instead of just
+;;;; FLOAT because FLOAT is shadowed by :CL/GA. For consistency, we
+;;;; use CL:<class> for the rest of the names as well, except T.
+
+;;;; TODO:
+;;;;  - Bit manipulation functions (BOOLE, logicals, ASH, etc)
+;;;;  - Some of the integer functions (PARSE-INTEGER, INTEGER-LENGTH)
+;;;;  ? Byte functions? (BYTE, BYTE-SIZE, BYTE-POSITION)
+;;;;  - A few more float functions I think (FLOAT-foo)
+;;;;  - NUMERATOR, DENOMINATOR
+;;;;  ? UPGRADED-COMPLEX-PART-TYPE
+;;;;  ? MAKE-RANDOM-STATE, RANDOM-STATE-P
 
 (in-package :cl/ga)
 
@@ -23,76 +35,54 @@
                (funcall ,unary-function number)
                (reduce ,binaryf numbers :initial-value number)))))
 
-(defmethod unary-+ ((x number))
+(defmethod unary-+ ((x cl:number))
   (cl:+ x))
 
-(defmethod binary-+ ((x number) (y number))
+(defmethod binary-+ ((x cl:number) (y cl:number))
   (cl:+ x y))
 
 ;;; derived
-#+ignore
-(defun + (&rest numbers)
-  (cond ((null numbers) 0) ;; XXX: Can we make 0 generic?
-        ((null (cdr numbers)) (unary-+ (car numbers)))
-        (t (reduce #'binary-+ numbers))))
-
 (defun-folded + #'binary-+
   :unary-function #'unary-+
   :initial-value 0)
 
-(defmethod unary-- ((x number))
+(defmethod unary-- ((x cl:number))
   (cl:- x))
 
-(defmethod binary-- ((x number) (y number))
+(defmethod binary-- ((x cl:number) (y cl:number))
   (cl:- x y))
 
 ;;; derived
-#+ignore
-(defun - (number &rest more-numbers)
-  (if (null more-numbers)
-      (unary-- number)
-      (reduce #'binary-- more-numbers :initial-value number)))
-
 (defun-folded - #'binary--
   :unary-function #'unary--)
 
-(defmethod unary-* ((x number))
+(defmethod unary-* ((x cl:number))
   (cl:* x))
 
-(defmethod binary-* ((x number) (y number))
+(defmethod binary-* ((x cl:number) (y cl:number))
   (cl:* x y))
 
 ;;; derived
-#+ignore
-(defun * (&rest numbers)
-  (cond ((null numbers) 1) ;; XXX: Can we make 1 generic?
-        ((null (cdr numbers)) (unary-* (car number)))
-        (t (reduce #'binary-* numbers))))
 (defun-folded * #'binary-*
   :unary-function #'unary-*
   :initial-value 1)
 
-(defmethod unary-/ ((y number))
+(defmethod unary-/ ((y cl:number))
   (cl:/ y))
 
-(defmethod binary-/ ((x number) (y number))
+(defmethod binary-/ ((x cl:number) (y cl:number))
   (cl:/ x y))
 
 ;;; derived
-#+ignore
-(defun / (number &rest more-numbers)
-  (if (null more-numbers)
-      (unary-/ number)
-      (reduce #'binary-/ more-numbers :initial-value number)))
 (defun-folded / #'binary-/
   :unary-function #'unary-/)
 
 ;;; not derived, since 1+ is naturally synonymous to "successor"
-(defmethod 1+ ((n number))
+(defmethod 1+ ((n cl:number))
   (cl:1+ n))
 
 ;;; not derived, since 1- is naturally synonymous to "predecessor"
-(defmethod 1- ((n number))
+(defmethod 1- ((n cl:number))
   (cl:1- n))
 
 ;;; derived
@@ -108,271 +98,256 @@
       `(setf ,place (1- ,place))))
 
 ;;; XXX: We can make these derived...
-(defmethod zerop ((n number))
+(defmethod zerop ((n cl:number))
   (cl:zerop n))
 
-(defmethod plusp ((n number))
+(defmethod plusp ((n cl:number))
   (cl:plusp n))
 
-(defmethod minusp ((n number))
+(defmethod minusp ((n cl:number))
   (cl:minusp n))
 
-(defmethod evenp ((n number))
+(defmethod evenp ((n cl:number))
   (cl:evenp n))
 
-(defmethod oddp ((n number))
+(defmethod oddp ((n cl:number))
   (cl:oddp n))
 
-(defmethod abs ((n number))
+(defmethod abs ((n cl:number))
   (cl:abs n))
 
-(defmethod sqrt ((n number))
+(defmethod sqrt ((n cl:number))
   (cl:sqrt n))
 
-(defmethod log ((n number) &optional (base nil base-p))
+(defmethod isqrt ((n cl:number))
+  (cl:isqrt n))
+
+(defmethod unary-lcm ((x cl:integer))
+  (cl:lcm x))
+
+(defmethod binary-lcm ((x cl:integer) (y cl:integer))
+  (cl:lcm x y))
+
+;; derived
+(defun-folded lcm #'binary-lcm
+  :unary-function #'unary-lcm
+  :initial-value 1)
+
+(defmethod unary-gcd ((x cl:integer))
+  (cl:gcd x))
+
+(defmethod binary-gcd ((x cl:integer) (y cl:integer))
+  (cl:gcd x y))
+
+;; derived
+(defun-folded gcd #'binary-gcd
+  :unary-function #'unary-gcd
+  :initial-value 0)
+
+(defmethod log ((n cl:number) &optional (base nil base-p))
   ;; Can we specialize BASE?
   (if base-p
       (cl:log n base)
       (cl:log n)))
 
-(defmethod exp ((n number))
+(defmethod exp ((n cl:number))
   (cl:exp n))
 
-(defmethod sin ((n number))
+(defmethod sin ((n cl:number))
   (cl:sin n))
 
-(defmethod cos ((n number))
+(defmethod cos ((n cl:number))
   (cl:cos n))
 
-(defmethod tan ((n number))
+(defmethod tan ((n cl:number))
   (cl:tan n))
 
-(defmethod asin ((n number))
+(defmethod asin ((n cl:number))
   (cl:asin n))
 
-(defmethod acos ((n number))
+(defmethod acos ((n cl:number))
   (cl:acos n))
 
-(defmethod atan ((y number) &optional (x nil xp))
+(defmethod atan ((y cl:number) &optional (x nil xp))
   (if xp (cl:atan y x) (cl:atan y)))
 
-(defmethod sinh ((n number))
+(defmethod sinh ((n cl:number))
   (cl:sinh n))
 
-(defmethod cosh ((n number))
+(defmethod cosh ((n cl:number))
   (cl:cosh n))
 
-(defmethod tanh ((n number))
+(defmethod tanh ((n cl:number))
   (cl:tanh n))
 
-(defmethod asinh ((n number))
+(defmethod asinh ((n cl:number))
   (cl:asinh n))
 
-(defmethod acosh ((n number))
+(defmethod acosh ((n cl:number))
   (cl:acosh n))
 
-(defmethod atanh ((n number))
+(defmethod atanh ((n cl:number))
   (cl:atanh n))
 
-(defmethod expt ((base number) (power number))
+(defmethod expt ((base cl:number) (power cl:number))
   (cl:expt base power))
 
-(defmethod mod ((n number) (d number))
+(defmethod mod ((n cl:number) (d cl:number))
   (cl:mod n d))
 
-(defmethod rem ((n number) (d number))
+(defmethod rem ((n cl:number) (d cl:number))
   (cl:rem n d))
 
-(defmethod binary-= ((n1 number) (n2 number))
+(defmethod binary-= ((n1 cl:number) (n2 cl:number))
   (cl:= n1 n2))
 
 ;;; derived
-#+ignore
-(defun = (number &rest more-numbers)
-  ;; TODO
-  )
 ;; XXX: Should this *always* be true for one argument? How about if it
 ;; was overloaded with NaN? Should we have a UNARY-= ?
 (defun-folded = #'binary-=
   :unary-function (constantly t))
 
-(defmethod binary-/= ((n1 number) (n2 number))
+(defmethod binary-/= ((n1 cl:number) (n2 cl:number))
   (cl:/= n1 n2))
 
 ;;; derived
-#+ignore
-(defun /= (number &rest more-numbers)
-  ;; TODO
-  )
 (defun-folded /= #'binary-/=
   :unary-function (constantly t))
 
-(defmethod binary-< ((n1 number) (n2 number))
+(defmethod binary-< ((n1 cl:number) (n2 cl:number))
   (cl:< n1 n2))
 
 ;;; derived
-#+ignore
-(defun < (number &rest more-numbers)
-  ;; TODO
-  )
 (defun-folded < #'binary-<
   :unary-function (constantly t))
 
-(defmethod binary-> ((n1 number) (n2 number))
+(defmethod binary-> ((n1 cl:number) (n2 cl:number))
   (cl:> n1 n2))
 
 ;;; derived
-#+ignore
-(defun > (number &rest more-numbers)
-  ;; TODO
-  )
 (defun-folded > #'binary->
   :unary-function (constantly t))
 
-(defmethod binary-<= ((n1 number) (n2 number))
+(defmethod binary-<= ((n1 cl:number) (n2 cl:number))
   (cl:<= n1 n2))
 
 ;;; derived
-#+ignore
-(defun <= (number &rest more-numbers)
-  ;; TODO
-  )
 (defun-folded <= #'binary-<=
   :unary-function (constantly t))
 
-(defmethod binary->= ((n1 number) (n2 number))
+(defmethod binary->= ((n1 cl:number) (n2 cl:number))
   (cl:>= n1 n2))
 
 ;;; derived
-#+ignore
-(defun >= (number &rest more-numbers)
-  ;; TODO
-  )
 (defun-folded >= #'binary->=
   :unary-function (constantly t))
 
-(defmethod complex (realpart &optional (imagpart 0))
-  ;; TODO
-  )
+(defmethod complex ((realpart cl:real) &optional (imagpart 0))
+  (cl:complex realpart imagpart))
 
-(defmethod integer-decode-float (x)
-  ;; TODO
-  )
+(defmethod integer-decode-float ((f cl:float))
+  (cl:integer-decode-float f))
 
-(defmethod decode-float (f)
-  ;; TODO
-  )
+(defmethod decode-float ((f cl:float))
+  (cl:decode-float f))
 
-(defmethod scale-float (f ex)
-  ;; TODO
-  )
+(defmethod scale-float ((f cl:float) (ex cl:integer))
+  (cl:scale-float f ex))
 
-(defmethod float (number &optional (other nil otherp))
-  ;; TODO
-  )
+(defmethod float-sign ((float1 cl:float) &optional (float2 (float 1 float1)))
+  (cl:float-sign float1 float2))
 
-(defmethod floor (number &optional (divisor 1))
-  ;; TODO
-  )
+(defmethod float-digits ((f cl:float))
+  (cl:float-digits f))
 
-(defmethod ffloor (number &optional (divisor 1))
-  ;; TODO
-  )
+(defmethod float ((n cl:real) &optional (other nil otherp))
+  (if otherp ;; in CL:FLOAT, does otherp matter?
+      (cl:float n other)
+      (cl:float n)))
 
-(defmethod ceiling (number &optional (divisor 1))
-  ;; TODO
-  )
+(defmethod floor ((n cl:real) &optional (divisor 1))
+  (cl:floor n divisor))
 
-(defmethod fceiling (number &optional (divisor 1))
-  ;; TODO
-  )
+(defmethod ffloor ((n cl:real) &optional (divisor 1))
+  (cl:ffloor n divisor))
 
-(defmethod truncate (number &optional (divisor 1))
-  ;; TODO
-  )
+(defmethod ceiling ((n cl:real) &optional (divisor 1))
+  (cl:ceiling n divisor))
 
-(defmethod ftruncate (number &optional (divisor 1))
-  ;; TODO
-  )
+(defmethod fceiling ((n cl:real) &optional (divisor 1))
+  (cl:fceiling n divisor))
 
-(defmethod round (number &optional (divisor 1))
-  ;; TODO
-  )
+(defmethod truncate ((n cl:real) &optional (divisor 1))
+  (cl:truncate n divisor))
 
-(defmethod fround (number &optional (divisor 1))
-  ;; TODO
-  )
+(defmethod ftruncate ((n cl:real) &optional (divisor 1))
+  (cl:ftruncate n divisor))
 
-(defmethod realpart ((n number))
-  ;; TODO
-  )
+(defmethod round ((n cl:real) &optional (divisor 1))
+  (cl:round n divisor))
 
-(defmethod imagpart ((n number))
-  ;; TODO
-  )
+(defmethod fround ((n cl:real) &optional (divisor 1))
+  (cl:fround n divisor))
 
-(defmethod conjugate ((n number))
-  ;; TODO
-  )
+(defmethod realpart ((n cl:number))
+  (cl:realpart n))
 
-(defmethod float-sign (float1 &optional (float2 (float 1 float1)))
-  ;; TODO
-  )
+(defmethod imagpart ((n cl:number))
+  (cl:imagpart n))
+
+(defmethod conjugate ((n cl:number))
+  (cl:conjugate n))
 
 ;;; derived
-#+ignore
-(defun max (number &rest more-numbers)
-  ;; TODO
-  )
 (defun-folded max #'(lambda (x y) (if (> x y) x y)))
 
 ;;; derived
-#+ignore
-(defun min (number &rest more-numbers)
-  ;; TODO
-  )
 (defun-folded min #'(lambda (x y) (if (> x y) x y)))
 
-;;derived
+;; derived
 (defun cis (theta)
   (complex (cos theta) (sin theta)))
 
-(defmethod phase ((n number))
-  ;; TODO
-  )
+(defmethod phase ((n cl:number))
+  (cl:phase n))
 
-(defmethod signum ((n number))
-  ;; TODO
-  )
+(defmethod signum ((n cl:number))
+  (cl:signum n))
 
-(defmethod coerce (obj output-type-spec)
-  ;; TODO
-  )
+;; CLHS says OBJ must be an object, OUTPUT-TYPE-SPEC a type
+;; specifier. Can we specify the types of these arguments more
+;; specifically?
+(defmethod coerce ((obj t) (output-type-spec t))
+  (cl:coerce obj output-type-spec))
 
-(defmethod random (arg &optional (state *random-state*))
-  ;; TODO
-  )
+;; ARG must be INTEGER or FLOAT, per CLHS
+(defmethod random ((arg cl:integer) &optional (state *random-state*))
+  (cl:random arg state))
 
-(defmethod realp (object)
-  ;; TODO
-  )
+;; ARG must be INTEGER or FLOAT, per CLHS
+(defmethod random ((arg cl:float) &optional (state *random-state*))
+  (cl:random arg state))
 
-(defmethod complexp (object)
-  ;; TODO
-  )
+(defmethod integerp ((object t))
+  (cl:integerp object))
 
-(defmethod numberp (object)
-  ;; TODO
-  )
+(defmethod rationalp ((object t))
+  (cl:rationalp object))
 
-(defmethod float-digits (f)
-  ;; TODO
-  )
+(defmethod realp ((object t))
+  (cl:realp object))
 
-(defmethod rational (x)
-  ;; TODO
-  )
+(defmethod floatp ((object t))
+  (cl:floatp object))
 
-(defmethod rationalize (x)
-  ;; TODO
-  )
+(defmethod complexp ((object t))
+  (cl:complexp object))
+
+(defmethod numberp ((object t))
+  (cl:numberp object))
+
+(defmethod rational ((x cl:real))
+  (cl:rational x))
+
+(defmethod rationalize ((x cl:real))
+  (cl:rationalize x))
