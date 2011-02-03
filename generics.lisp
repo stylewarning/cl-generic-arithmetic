@@ -127,7 +127,7 @@
 
 ;;(defgeneric min (number &rest more-numbers))
 
-;;(defgeneric cis (theta))
+(defgeneric cis (number))
 
 (defgeneric phase (number))
 

@@ -334,8 +334,8 @@
 (defun-folded min #'(lambda (x y) (if (> x y) x y)))
 
 ;;derived
-(defun cis (theta)
-  (complex (cos theta) (sin theta)))
+(defmethod cis ((theta real))
+  (cl:cis theta))
 
 (defmethod phase ((n number))
   ;; TODO
