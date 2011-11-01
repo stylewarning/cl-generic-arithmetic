@@ -1,9 +1,13 @@
-;;;; clga-generics.lisp
+;;;; generics.lisp
 ;;;; Copyright (c) 2011 Robert Smith
+
+;;;; This file contains all of the generic functions for the numerical
+;;;; operators.
 
 (in-package :cl/ga)
 
 ;;(defgeneric + (&rest args))
+(defgeneric nullary-+ (type))
 (defgeneric unary-+ (x))
 (defgeneric binary-+ (x y))
 
@@ -12,6 +16,7 @@
 (defgeneric binary-- (x y))
 
 ;;(defgeneric * (&rest args))
+(defgeneric nullary-* (type))
 (defgeneric unary-* (x))
 (defgeneric binary-* (x y))
 
@@ -168,7 +173,4 @@
 (defgeneric rational (x))
 
 (defgeneric rationalize (x))
-
-
-
 

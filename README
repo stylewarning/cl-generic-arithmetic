@@ -1,1 +1,76 @@
-Generic arithmetic operators in CL.
+CL-GENERIC-ARITHMETIC
+=====================
+
+AUTHOR
+------
+
+Robert Smith
+
+
+ABSTRACT
+--------
+
+This system provides generic arithmetic operators in CL. Most
+arithmetic/numerical functions -- such as +, MAX, COS, or SQRT -- are
+"CLOS-ified". They are provided in the form of packages which are
+alternatives to the standard common lisp packages.
+
+  Standard Package       CLOSified
+  ----------------       -----------------------------------
+  COMMON-LISP            COMMON-LISP/GENERIC-ARITHMETIC
+  COMMON-LISP-USER       COMMON-LISP/GENERIC-ARITHMETIC-USER
+  CL                     CL/GA
+  CL-USER                CL/GA-USER
+
+
+DEPENDENCIES
+------------
+
+This package makes use of CONDUIT-PACKAGES
+
+EXAMPLE
+-------
+
+CL-USER> (ql:quickload "cl-generic-arithmetic")
+To load "cl-generic-arithmetic":
+  Load 1 ASDF system:
+    cl-generic-arithmetic
+; Loading "cl-generic-arithmetic"
+.....
+("cl-generic-arithmetic")
+CL-USER> (in-package :cl/ga-user)
+#<PACKAGE "COMMON-LISP/GENERIC-ARITHMETIC-USER">
+CL/GA-USER> (+ 1 2 3 4 5)
+15
+CL/GA-USER> (defmethod nullary-+ ((type string)) "")
+#<STANDARD-METHOD NULLARY-+ (STRING) {133731B9}>
+CL/GA-USER> (defmethod unary-+ ((x string)) x)
+#<STANDARD-METHOD UNARY-+ (STRING) {1279D919}>
+CL/GA-USER> (defmethod binary-+ ((x string) (y string))
+              (concatenate 'string x y))
+#<STANDARD-METHOD BINARY-+ (STRING STRING) {128605C1}>
+CL/GA-USER> (+ "hello" "world")
+"helloworld"
+CL/GA-USER> (defmethod abs ((x string)) (length x))
+#<STANDARD-METHOD ABS (STRING) {12FE4F79}>
+CL/GA-USER> (abs (+ "hello" "world"))
+10
+
+
+LIMITATIONS
+-----------
+
+Genericizing operators with &REST arguments requires defining NULLARY,
+UNARY, and BINARY versions of the operator. This should be fixed.
+
+
+COPYRIGHT
+---------
+
+Copyright (c) Robert Smith, 2011
+
+
+LICENSE
+-------
+
+Please see the included file LICENSE.

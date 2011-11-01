@@ -48,9 +48,9 @@
                       #:rationalize)
   (:export
    ;; new functions
-   #:unary-+ #:binary-+
+   #:nullary-+ #:unary-+ #:binary-+
    #:unary-- #:binary--
-   #:unary-* #:binary-*
+   #:nullary-* #:unary-* #:binary-*
    #:unary-/ #:binary-/
    #:binary-= #:binary-/=
    #:binary-> #:binary-<

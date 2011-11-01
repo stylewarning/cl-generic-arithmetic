@@ -1,4 +1,4 @@
-;;;; clga-methods.lisp
+;;;; methods.lisp
 ;;;; Copyright (c) 2011 Robert Smith
 
 ;;;; All of the "default" method implementations for built-in CL
@@ -21,19 +21,32 @@
 
 (defmacro defun-folded (name binaryf
                         &key
-                        (unary-function '#'identity)
-                        (initial-value nil initial-value-p))
+                          (unary-function '#'identity)
+                          (nullary-function nil nullary-function-p)
+                          (initial-value nil initial-value-p)
+                          )
   `(defun ,name ,(if initial-value-p
                      `(&rest numbers)
                      `(number &rest numbers))
-     ,(if initial-value-p
-          `(cond
-             ((null numbers) ,initial-value)
-             ((null (cdr numbers)) (funcall ,unary-function (car numbers)))
-             (t (reduce ,binaryf numbers :initial-value ,initial-value)))
-          `(if (null numbers)
-               (funcall ,unary-function number)
-               (reduce ,binaryf numbers :initial-value number)))))
+     ,(cond
+        (initial-value-p
+         `(cond
+            ((null numbers) ,initial-value)
+            ((null (cdr numbers)) (funcall ,unary-function (car numbers)))
+            (t (reduce ,binaryf numbers :initial-value ,initial-value))))
+        
+        (nullary-function-p
+         `(if (null numbers)
+              (funcall ,unary-function number)
+              (reduce ,binaryf (cons number numbers)
+                      :initial-value (funcall ,nullary-function number))))
+        
+        (t `(if (null numbers)
+                (funcall ,unary-function number)
+                (reduce ,binaryf numbers :initial-value number))))))
+
+(defmethod nullary-+ ((type cl:number))
+  0)
 
 (defmethod unary-+ ((x cl:number))
   (cl:+ x))
@@ -44,7 +57,7 @@
 ;;; derived
 (defun-folded + #'binary-+
   :unary-function #'unary-+
-  :initial-value 0)
+  :nullary-function #'nullary-+)
 
 (defmethod unary-- ((x cl:number))
   (cl:- x))
@@ -56,6 +69,9 @@
 (defun-folded - #'binary--
   :unary-function #'unary--)
 
+(defmethod nullary-* ((type cl:number))
+  1)
+
 (defmethod unary-* ((x cl:number))
   (cl:* x))
 
@@ -65,7 +81,7 @@
 ;;; derived
 (defun-folded * #'binary-*
   :unary-function #'unary-*
-  :initial-value 1)
+  :nullary-function #'nullary-*)
 
 (defmethod unary-/ ((y cl:number))
   (cl:/ y))
@@ -97,7 +113,8 @@
       `(setf ,place (- ,place ,delta-form))
       `(setf ,place (1- ,place))))
 
-;;; XXX: We can make these derived...
+;;; XXX: We can make these derived if we are able to talk about zero
+;;; and unit elements of a domain
 (defmethod zerop ((n cl:number))
   (cl:zerop n))
 
@@ -261,7 +278,7 @@
   (cl:float-digits f))
 
 (defmethod float ((n cl:real) &optional (other nil otherp))
-  (if otherp ;; in CL:FLOAT, does otherp matter?
+  (if otherp ; in CL:FLOAT, does otherp matter?
       (cl:float n other)
       (cl:float n)))
 
@@ -303,6 +320,13 @@
 
 ;;; derived
 (defun-folded min #'(lambda (x y) (if (> x y) x y)))
+
+;;; default
+(defmethod cis ((theta t))
+  (let ((cosine (cos theta))
+        (sine   (sin theta)))
+    (sqrt (+ (* sine sine)
+             (* cosine cosine)))))
 
 (defmethod cis ((theta real))
   (cl:cis theta))

@@ -5,9 +5,9 @@
 
 (defsystem cl-generic-arithmetic
   :name "Common Lisp Generic Arithmetic"
-  :version "0.0.1"
+  :version "0.1"
   :author "Robert Smith"
-  :license "MIT (see file LICENSE)"
+  :license "BSD 3-clause (see file LICENSE)"
   :description "The COMMON-LISP package with generic numerical operators."
   :long-description "The COMMON-LISP package with generic numerical operators."
 
