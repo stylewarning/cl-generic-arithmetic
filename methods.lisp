@@ -23,8 +23,7 @@
                         &key
                           (unary-function '#'identity)
                           (nullary-function nil nullary-function-p)
-                          (initial-value nil initial-value-p)
-                          )
+                          (initial-value nil initial-value-p))
   `(defun ,name ,(if initial-value-p
                      `(&rest numbers)
                      `(number &rest numbers))
@@ -148,6 +147,7 @@
 ;; derived
 (defun-folded lcm #'binary-lcm
   :unary-function #'unary-lcm
+  ;; FIXME: Dangerous to assume 1...
   :initial-value 1)
 
 (defmethod unary-gcd ((x cl:integer))
@@ -159,6 +159,7 @@
 ;; derived
 (defun-folded gcd #'binary-gcd
   :unary-function #'unary-gcd
+  ;; FIXME: Dangerous to assume 0...
   :initial-value 0)
 
 (defmethod log ((n cl:number) &optional (base nil base-p))
