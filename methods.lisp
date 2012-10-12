@@ -100,6 +100,14 @@
 (defmethod 1- ((n cl:number))
   (cl:1- n))
 
+;;; XXX FIXME: The following two macros are problematic because PLACE
+;;; would be evaluated more then once in the event it's a macro. However,
+;;; 
+;;;   (define-modify-macro incf (&optional (y 1)) +)
+;;; 
+;;; would force the use of the INTEGER class 1 as the second argument
+;;; to the macro, which is problematic for typical usage.
+
 ;;; derived
 (defmacro incf (place &optional (delta-form nil delta-p))
   (if delta-p
