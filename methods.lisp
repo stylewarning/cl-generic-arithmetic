@@ -328,7 +328,7 @@
 (defun-folded max #'(lambda (x y) (if (> x y) x y)))
 
 ;;; derived
-(defun-folded min #'(lambda (x y) (if (> x y) x y)))
+(defun-folded min #'(lambda (x y) (if (> x y) y x)))
 
 ;;; default
 (defmethod cis ((theta t))
