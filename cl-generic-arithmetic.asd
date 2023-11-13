@@ -15,4 +15,4 @@
   :components ((:file "package")
                (:file "generics")
                (:file "methods"))
-  :depends-on (:conduit-packages))
+  :depends-on (:org.tfeb.conduit-packages))
